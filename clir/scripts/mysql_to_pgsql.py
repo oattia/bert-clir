@@ -14,24 +14,22 @@ def main():
     db.execute_update(f"""
         CREATE TABLE wiki.en_langlinks (
             ll_from     int,
-            ll_lang     text
+            ll_lang     text,
+            ll_title    text
         )
     """)
 
     cursor = cnx.cursor()
 
     query = f"""
-        select ll_from, ll_lang from wiki.langlinks
+        select ll_from, ll_lang, ll_title from wiki.langlinks order by ll_from
+        where ll_lang in ('ar', 'de')
     """
 
     cursor.execute(query)
 
     t = []
     for p in cursor:
-        # print(type(p[0]))
-        # print(type(p[1]))
-        # print(type(p[2]))
-        # # (int(p[0]), str(p[1]), str(p[2]))
         t.append(p)
 
     db.insert_records_parallel(records=t, schema_name='wiki', table_name='en_langlinks')
