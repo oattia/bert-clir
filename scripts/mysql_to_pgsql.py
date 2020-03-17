@@ -21,3 +21,6 @@ def main():
 
     cnx.close()
 
+
+if __name__ == "__main__":
+    main()
