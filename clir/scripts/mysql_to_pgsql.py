@@ -1,5 +1,5 @@
 import mysql.connector
-from db.pgsql import DB
+from clir.db.pgsql import DB
 
 
 def main():

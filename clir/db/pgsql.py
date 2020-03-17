@@ -9,7 +9,7 @@ import psycopg2
 from sqlalchemy import create_engine
 from sqlalchemy.engine import ResultProxy
 
-from utils.singleton import Singleton
+from clir.utils.singleton import Singleton
 
 
 def conn_str(host: str='localhost', database: str='wiki', username: str='holocleanuser', password: str='abcd1234') -> str:
