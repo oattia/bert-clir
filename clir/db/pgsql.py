@@ -12,7 +12,7 @@ from sqlalchemy.engine import ResultProxy
 from clir.utils.singleton import Singleton
 
 
-def conn_str(host: str='localhost', database: str='wiki', username: str='holocleanuser', password: str='abcd1234') -> str:
+def conn_str(host: str='localhost', port:str = '5432', database: str='wiki', username: str='holocleanuser', password: str='abcd1234') -> str:
     """
     Generate a PostgreSQL connection string from connection parameters.
 
@@ -22,7 +22,7 @@ def conn_str(host: str='localhost', database: str='wiki', username: str='holocle
     :param password: the database password
     :return: the database connection string
     """
-    return f"postgresql://{username}:{password}@{host}:/{database}"
+    return f"postgresql://{username}:{password}@{host}:{port}/{database}"
 
 
 logger = logging.getLogger(__name__)
