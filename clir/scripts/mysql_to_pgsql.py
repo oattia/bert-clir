@@ -22,8 +22,10 @@ def main():
     cursor = cnx.cursor()
 
     query = f"""
-        select ll_from, ll_lang, ll_title from wiki.langlinks order by ll_from
+        select ll_from, ll_lang, ll_title 
+        from wiki.langlinks
         where ll_lang in ('ar', 'de')
+        order by ll_from
     """
 
     cursor.execute(query)
