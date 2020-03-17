@@ -29,7 +29,7 @@ def main():
 
     t = []
     for p in cursor:
-        t.append((int(p[0]), str(p[1]), str(p[2])))
+        t.append((int(p[0]), str(p[1]), str(p[2].decode('utf-8'))))
 
     db.insert_records_parallel(records=t, schema_name='wiki', table_name='en_langlinks')
 
