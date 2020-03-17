@@ -29,6 +29,9 @@ def main():
 
     t = []
     for p in cursor:
+        print(type(p[0]))
+        print(type(p[1]))
+        print(type(p[2]))
         # (int(p[0]), str(p[1]), str(p[2]))
         t.append(p)
 
