@@ -9,6 +9,8 @@ def main():
                                   host='127.0.0.1',
                                   database='wiki')
 
+    db.drop_table("wiki.en_langlinks")
+
     db.execute_update(f"""
         CREATE TABLE wiki.en_langlinks (
             ll_from    int,
@@ -27,7 +29,7 @@ def main():
 
     t = []
     for p in cursor:
-        t.append(p)
+        t.append((int(p[0]), str(p[1]), str(p[2])))
 
     db.insert_records_parallel(records=t, schema_name='wiki', table_name='en_langlinks')
 
