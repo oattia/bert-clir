@@ -31,6 +31,10 @@ def main(lang, file_path):
 
     db.insert_records_parallel(records=tuples, schema_name="wiki", table_name=f"{lang}_wiki")
 
+    db.execute_update(f"CREATE INDEX ON wiki.{lang}_wiki(id)")
+    db.execute_update(f"CREATE INDEX ON wiki.{lang}_wiki(title)")
+    db.execute_update(f"CREATE INDEX ON wiki.{lang}_wiki(length)")
+
 
 if __name__ == "__main__":
     lang = sys.argv[1]

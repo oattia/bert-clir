@@ -40,6 +40,10 @@ def main():
 
     cnx.close()
 
+    db.execute_update(f"CREATE INDEX ON wiki.en_langlinks(ll_from)")
+    db.execute_update(f"CREATE INDEX ON wiki.en_langlinks(ll_lang)")
+    db.execute_update(f"CREATE INDEX ON wiki.en_langlinks(ll_title)")
+
 
 if __name__ == "__main__":
     main()
