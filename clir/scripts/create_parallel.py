@@ -8,7 +8,7 @@ def main(lang):
 
     db.drop_table(f"wiki.{lang}_en_par")
     db.execute_update(f"""
-        CREATE TABLE wiki.{lang}_en_par AS (
+        CREATE TABLE wiki.{lang}_en_par (
             {lang}_id       int,
             en_id           int, 
             {lang}_title    text,
