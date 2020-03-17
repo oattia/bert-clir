@@ -36,3 +36,5 @@ dependencies:
       - pytest-pudb==0.7.0
       - truepy==2.0.3
       - mysql-connector-python==8.0.19
+      - bert-serving-server==1.10.0
+      - bert-serving-client==1.10.0
