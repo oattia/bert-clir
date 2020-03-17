@@ -13,9 +13,9 @@ def main():
 
     db.execute_update(f"""
         CREATE TABLE wiki.en_langlinks (
-            ll_from    int,
-            ll_lang    TEXT,
-            ll_title    TEXT
+            ll_from     int,
+            ll_lang     bytea,
+            ll_title    bytea
         )
     """)
 
@@ -29,7 +29,7 @@ def main():
 
     t = []
     for p in cursor:
-        t.append((int(p[0]), str(p[1]), str(p[2].decode('utf-8'))))
+        t.append((int(p[0]), str(p[1]), str(p[2])))
 
     db.insert_records_parallel(records=t, schema_name='wiki', table_name='en_langlinks')
 
