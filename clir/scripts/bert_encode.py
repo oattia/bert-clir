@@ -62,7 +62,7 @@ def main(lang):
 
     records = zip(lang_ids, en_ids, ml_embs, en_embs)
 
-    db.insert_records_parallel(records=records, schema_name="wiki", table_name=f"{lang}_en_embs")
+    db.insert_records_parallel(records=records, schema_name="wiki", table_name=f"{lang}_en_titles_embs")
 
 
 if __name__ == "__main__":
