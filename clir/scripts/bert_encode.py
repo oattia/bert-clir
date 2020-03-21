@@ -50,7 +50,7 @@ def main(lang):
     ml_embs = ml_bc.fetch_all()
     en_embs = en_bc.fetch_all()
 
-    db.drop_table(f"wiki.{lang}_en_embs")
+    db.drop_table(f"wiki.{lang}_en_titles_embs")
     db.execute_update(f"""
         CREATE TABLE wiki.{lang}_en_titles_embs (
             {lang}_id   int,
