@@ -44,8 +44,8 @@ def main(lang):
     lang_text = [p[2] for p in result]
     en_text = [p[3] for p in result]
 
-    ml_bc.encode_async(lang_text, blocking=False)
-    en_bc.encode_async(en_text, blocking=False)
+    ml_bc.encode(lang_text, blocking=False)
+    en_bc.encode(en_text, blocking=False)
 
     ml_embs = ml_bc.fetch_all()
     en_embs = en_bc.fetch_all()
