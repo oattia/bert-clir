@@ -67,7 +67,7 @@ def main(lang):
     records = list(zip(lang_ids, en_ids, ml_embs, en_embs))
     bs = 1000
     j = 0
-    for i in range(start=0, step=bs, stop=len(records)):
+    for i in range(0, len(records), bs):
         b = records[i:i + bs]
         try:
             db.insert_records_parallel(records=b,

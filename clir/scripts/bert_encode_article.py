@@ -32,7 +32,7 @@ def main(lang):
         FROM wiki.{lang}_en_par
         WHERE en_length <= 4 * {lang}_length
         ORDER BY {lang}_length
-        LIMIT 100
+        LIMIT 3
     """
 
     result = db.execute_query(read_q)
@@ -48,6 +48,12 @@ def main(lang):
     ml_embs = ml_bc.fetch_all()
     en_embs = en_bc.fetch_all()
 
+    assert len(ml_embs) == 1 and len(en_embs) == 1, "UhOh 1"
+    assert len(ml_embs[0]) == len(lang_text) and len(en_embs[0]) == len(en_text), "UhOh 2"
+
+    ml_embs = [ml_embs[0][i] for i in range(len(ml_embs[0]))]
+    en_embs = [en_embs[0][i] for i in range(len(en_embs[0]))]
+
     db.drop_table(f"wiki.{lang}_en_titles_embs")
     db.execute_update(f"""
         CREATE TABLE wiki.{lang}_en_titles_embs (
@@ -61,7 +67,7 @@ def main(lang):
     records = list(zip(lang_ids, en_ids, ml_embs, en_embs))
     bs = 1000
     j = 0
-    for i in range(start=0, step=bs, stop=len(records)):
+    for i in range(0, len(records), bs):
         b = records[i:i + bs]
         try:
             db.insert_records_parallel(records=b,
