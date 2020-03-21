@@ -31,7 +31,7 @@ def main(lang):
 
     read_q = f"""
         SELECT {lang}_id, en_id, {lang}_title, en_title
-        FROM {lang}_en_par
+        FROM wiki.{lang}_en_par
         WHERE en_length <= 4 * {lang}_length
         ORDER BY {lang}_length
         LIMIT 200000
