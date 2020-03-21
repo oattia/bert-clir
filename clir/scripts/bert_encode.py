@@ -44,7 +44,7 @@ def main(lang):
     lang_text = [p[2] for p in result]
     en_text = [p[3] for p in result]
 
-    ml_bc.encode(lang_text, blocking=False)
+    ml_bc.encode_async(lang_text, blocking=False)
     en_bc.encode_async(en_text, blocking=False)
 
     ml_embs = ml_bc.fetch_all()
@@ -52,7 +52,7 @@ def main(lang):
 
     db.drop_table(f"wiki.{lang}_en_embs")
     db.execute_update(f"""
-        CREATE TABLE wiki.{lang}_en_embs (
+        CREATE TABLE wiki.{lang}_en_titles_embs (
             {lang}_id   int,
             en_id       int,
             {lang}_emb  decimal[],
