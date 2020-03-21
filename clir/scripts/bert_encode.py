@@ -45,8 +45,8 @@ def main(lang):
     ml_bc.encode(lang_text, blocking=False)
     en_bc.encode(en_text, blocking=False)
 
-    ml_embs = [x[0] for x in ml_bc.fetch_all()]
-    en_embs = [x[0] for x in en_bc.fetch_all()]
+    ml_embs = [x[0][0] for x in ml_bc.fetch_all()]
+    en_embs = [x[0][0] for x in en_bc.fetch_all()]
 
     db.drop_table(f"wiki.{lang}_en_titles_embs")
     db.execute_update(f"""
