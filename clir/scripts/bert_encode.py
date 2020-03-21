@@ -56,7 +56,7 @@ def main(lang):
 
     db.drop_table(f"wiki.{lang}_en_titles_embs")
     db.execute_update(f"""
-        CREATE TABLE wiki.{lang}_en_titles_embs (
+        CREATE UNLOGGED TABLE wiki.{lang}_en_titles_embs (
             {lang}_id   bigint,
             en_id       bigint,
             {lang}_emb  decimal[],
@@ -74,7 +74,7 @@ def main(lang):
                                        schema_name="wiki",
                                        table_name=f"{lang}_en_titles_embs",
                                        columns=[f"{lang}_id", "en_id", f"{lang}_emb", "en_emb"])
-            print(f"Inserted {bs} successfully")
+            print(f"Inserted {bs} successfully: {i*bs}/{len(records)} done")
         except:
             j += 1
             print(f"Failed to insert {bs} for time {j}")
