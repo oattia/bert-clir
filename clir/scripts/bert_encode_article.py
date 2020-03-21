@@ -32,7 +32,7 @@ def main(lang):
         FROM wiki.{lang}_en_par
         WHERE en_length <= 4 * {lang}_length
         ORDER BY {lang}_length
-        LIMIT 200000
+        LIMIT 100
     """
 
     result = db.execute_query(read_q)
@@ -58,16 +58,22 @@ def main(lang):
         )
     """)
 
-    records = zip(lang_ids, en_ids, ml_embs, en_embs)
-
-    db.insert_records_parallel(records=records,
-                               schema_name="wiki",
-                               table_name=f"{lang}_en_titles_embs",
-                               columns=[f"{lang}_id", "en_id", f"{lang}_emb", "en_emb"])
+    records = list(zip(lang_ids, en_ids, ml_embs, en_embs))
+    bs = 1000
+    j = 0
+    for i in range(start=0, step=bs, stop=len(records)):
+        b = records[i:i + bs]
+        try:
+            db.insert_records_parallel(records=b,
+                                       schema_name="wiki",
+                                       table_name=f"{lang}_en_titles_embs",
+                                       columns=[f"{lang}_id", "en_id", f"{lang}_emb", "en_emb"])
+            print(f"Inserted {bs} successfully")
+        except:
+            j += 1
+            print(f"Failed to insert {bs} for time {j}")
 
 
 if __name__ == "__main__":
     lang = sys.argv[1]
     main(lang)
-
-

@@ -7,10 +7,10 @@ from clir.db.pgsql import DB
 
 f"""
     docker run --gpus all -p 5554:5554 -p 5555:5555 -p 5556:5556 -p 5557:5557 -v ~/workplace/dlnlp/models/cased_L-12_H-768_A-12/:/model_en -v ~/workplace/dlnlp/models/multi_cased_L-12_H-768_A-12/:/model_multi -t bert-as-service
-    
+
     en:
     bert-serving-start -model_dir=/model_en  -num_worker=1 -max_seq_len=NONE -cased_tokenization -gpu_memory_fraction=0.47 -port=5554 -port_out=5555
-    
+
     multi:
     bert-serving-start -model_dir=/model_multi -num_worker=1 -max_seq_len=NONE -cased_tokenization -gpu_memory_fraction=0.47 -port=5556 -port_out=5557
 """
@@ -32,7 +32,7 @@ def main(lang):
         FROM wiki.{lang}_en_par
         WHERE en_length <= 4 * {lang}_length
         ORDER BY {lang}_length
-        LIMIT 200000
+        LIMIT 100
     """
 
     result = db.execute_query(read_q)
@@ -51,20 +51,29 @@ def main(lang):
     db.drop_table(f"wiki.{lang}_en_titles_embs")
     db.execute_update(f"""
         CREATE TABLE wiki.{lang}_en_titles_embs (
-            {lang}_id   int,
-            en_id       int,
+            {lang}_id   bigint,
+            en_id       bigint,
             {lang}_emb  decimal[],
             en_emb      decimal[]            
         )
     """)
 
-    records = zip(lang_ids, en_ids, ml_embs, en_embs)
-
-    db.insert_records_parallel(records=records, schema_name="wiki", table_name=f"{lang}_en_titles_embs")
+    records = list(zip(lang_ids, en_ids, ml_embs, en_embs))
+    bs = 1000
+    j = 0
+    for i in range(start=0, step=bs, stop=len(records)):
+        b = records[i:i + bs]
+        try:
+            db.insert_records_parallel(records=b,
+                                       schema_name="wiki",
+                                       table_name=f"{lang}_en_titles_embs",
+                                       columns=[f"{lang}_id", "en_id", f"{lang}_emb", "en_emb"])
+            print(f"Inserted {bs} successfully")
+        except:
+            j += 1
+            print(f"Failed to insert {bs} for time {j}")
 
 
 if __name__ == "__main__":
     lang = sys.argv[1]
     main(lang)
-
-
