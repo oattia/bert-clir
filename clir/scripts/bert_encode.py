@@ -32,7 +32,7 @@ def main(lang):
         FROM wiki.{lang}_en_par
         WHERE en_length <= 4 * {lang}_length
         ORDER BY {lang}_length
-        LIMIT 1
+        LIMIT 3
     """
 
     result = db.execute_query(read_q)
@@ -45,8 +45,14 @@ def main(lang):
     ml_bc.encode(lang_text, blocking=False)
     en_bc.encode(en_text, blocking=False)
 
-    ml_embs = [x[0][0] for x in ml_bc.fetch_all()]
-    en_embs = [x[0][0] for x in en_bc.fetch_all()]
+    ml_embs = ml_bc.fetch_all()
+    en_embs = en_bc.fetch_all()
+
+    assert len(ml_embs) == 1 and len(en_embs) == 1, "UhOh 1"
+    assert len(ml_embs[0]) == len(lang_text) and len(en_embs[0]) == len(en_text), "UhOh 2"
+
+    ml_embs = [ml_embs[0][i] for i in range(len(ml_embs[0]))]
+    en_embs = [en_embs[0][i] for i in range(len(en_embs[0]))]
 
     db.drop_table(f"wiki.{lang}_en_titles_embs")
     db.execute_update(f"""
