@@ -3,6 +3,11 @@ import json
 
 from clir.db.pgsql import DB
 
+"""
+inside: /home/oattia/workplace/dlnlp/extractors/wikiextractor
+
+python ./WikiExtractor.py ../../dumps/en/enwiki-20200301-pages-articles-multistream.xml.bz2  -c --json -b 400G --processes 16 --filter_disambig_pages -o ../../dumps/en/enwiki_extracted
+"""
 
 def main(lang, file_path):
     db = DB()
