@@ -65,7 +65,7 @@ def main(lang):
         candidates_embs = [lang_embs[i]] + [lang_embs[idx] for idx in random_perm]
 
         np.random.shuffle(candidates_embs)
-        en_x, lang_x = cca.predict([en_embs_test[i]], candidates_embs)
+        en_x, lang_x = cca.predict([en_embs[i]], candidates_embs)
         sims = sim.compute(en_x, lang_x)
 
         en_id = en_ids[i]
