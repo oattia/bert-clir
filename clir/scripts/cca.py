@@ -16,7 +16,7 @@ def main(lang):
         FROM wiki.{lang}_en_titles_embs e, wiki.{lang}_en_par p
         WHERE e.{lang}_id = p.{lang}_id AND e.en_id = p.en_id
         ORDER BY random()
-        limit 10000
+        limit 100
     """
 
     print("Getting data ...")
@@ -61,16 +61,16 @@ def main(lang):
     print("Running CCA Inference ... ")
     records = []
     for i in tqdm(range(len(lang_ids))):
-        random_perm = [idx for idx in np.random.permutation(len(lang_embs))[:5] if idx != i]
+        random_perm = [idx for idx in np.random.permutation(len(lang_ids))[:5] if idx != i]
+
         candidates_embs = [lang_embs[i]] + [lang_embs[idx] for idx in random_perm]
 
-        np.random.shuffle(candidates_embs)
         en_x, lang_x = cca.predict([en_embs[i]], candidates_embs)
         sims = sim.compute(en_x, lang_x)
 
         en_id = en_ids[i]
-        cands_ids = [lang_ids[idx] for idx in random_perm]
-        cands_titles = [lang_titles[idx] for idx in random_perm]
+        cands_ids = [lang_ids[i]] + [lang_ids[idx] for idx in random_perm]
+        cands_titles = [lang_titles[i]] + [lang_titles[idx] for idx in random_perm]
 
         record = (en_id, en_titles[i], en_id in trainids, cands_ids, cands_titles, sims)
         records.append(record)
@@ -88,6 +88,7 @@ def main(lang):
         )
     """)
 
+    import pudb; pu.db
     bs = 10000
     j = 0
     for i in range(0, len(records), bs):
