@@ -88,7 +88,6 @@ def main(lang):
         )
     """)
 
-    import pudb; pu.db
     bs = 10000
     j = 0
     for i in range(0, len(records), bs):
@@ -98,9 +97,9 @@ def main(lang):
                                        schema_name="wiki",
                                        table_name=f"{lang}_en_output_{cca}_{sim}")
             print(f"Inserted {bs} successfully: {i}/{len(records)} done")
-        except:
+        except Exception as e:
             j += 1
-            print(f"Failed to insert {bs} for time {j}")
+            print(f"Failed to insert {bs} for time {j} because of {e}")
 
     db.execute_update(f"CREATE INDEX ON wiki.{lang}_en_output_{cca}_{sim}(en_id)")
     db.execute_update(f"CREATE INDEX ON wiki.{lang}_en_output_{cca}_{sim}(en_title)")
