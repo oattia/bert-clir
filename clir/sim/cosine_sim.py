@@ -10,4 +10,4 @@ class CosineSimilarity(Similarity):
         x_en = np.array(x_en)
         x_multi = np.array(x_multi)
         sims = np.dot(x_en, x_multi.T) / (np.linalg.norm(x_en) * np.linalg.norm(x_multi, axis=1))
-        return sims.tolist()
+        return sims.tolist()[0]
