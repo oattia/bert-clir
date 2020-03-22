@@ -1,4 +1,3 @@
-import re
 import sys
 
 from bert_serving.client import BertClient
@@ -16,19 +15,13 @@ f"""
 """
 
 
-def clean_text(text: str) -> str:
-    text = re.sub("'", "", text)
-    text = re.sub("(\\W)+", " ", text)
-    return text
-
-
 def main(lang):
     db = DB()
     en_bc = BertClient(output_fmt='list', port=5554, port_out=5555)
     ml_bc = BertClient(output_fmt='list', port=5556, port_out=5557)
 
     read_q = f"""
-        SELECT {lang}_id, en_id, {lang}_title, en_title
+        SELECT {lang}_id, en_id, {lang}_content, en_content
         FROM wiki.{lang}_en_par
         WHERE en_length <= 4 * {lang}_length
         ORDER BY {lang}_length
@@ -56,16 +49,16 @@ def main(lang):
 
     db.drop_table(f"wiki.{lang}_en_titles_embs")
     db.execute_update(f"""
-        CREATE TABLE wiki.{lang}_en_titles_embs (
-            {lang}_id   bigint,
-            en_id       bigint,
+        CREATE UNLOGGED TABLE wiki.{lang}_en_titles_embs (
+            {lang}_id   int,
+            en_id       int,
             {lang}_emb  decimal[],
             en_emb      decimal[]            
         )
     """)
 
     records = list(zip(lang_ids, en_ids, ml_embs, en_embs))
-    bs = 1000
+    bs = 10000
     j = 0
     for i in range(0, len(records), bs):
         b = records[i:i + bs]
@@ -74,10 +67,13 @@ def main(lang):
                                        schema_name="wiki",
                                        table_name=f"{lang}_en_titles_embs",
                                        columns=[f"{lang}_id", "en_id", f"{lang}_emb", "en_emb"])
-            print(f"Inserted {bs} successfully")
+            print(f"Inserted {bs} successfully: {i}/{len(records)} done")
         except:
             j += 1
             print(f"Failed to insert {bs} for time {j}")
+
+    db.execute_update(f"CREATE INDEX ON wiki.{lang}_en_titles_embs(en_id)")
+    db.execute_update(f"CREATE INDEX ON wiki.{lang}_en_titles_embs({lang}_id)")
 
 
 if __name__ == "__main__":
