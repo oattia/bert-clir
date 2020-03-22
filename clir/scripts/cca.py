@@ -18,6 +18,7 @@ def main(lang):
         ORDER BY random()
     """
 
+    print("Getting data ...")
     result = db.execute_query(read_q)
 
     lang_ids = [p[0] for p in result]
@@ -43,6 +44,7 @@ def main(lang):
     cca = LinearCCAModel(num_components=50)
     sim = CosineSimilarity()
 
+    print("Training CCA ... ")
     cca.train(en_embs_train, lang_embs_train)
 
     # construct test sets:
@@ -55,6 +57,7 @@ def main(lang):
 
     assert len(lang_embs_test) == len(en_embs_test)
 
+    print("Running CCA Inference ... ")
     records = []
     for i in tqdm(range(len(lang_ids))):
         random_perm = [idx for idx in np.random.permutation(len(lang_embs))[:5] if idx != i]
