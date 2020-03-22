@@ -37,9 +37,11 @@ def main(lang):
     """
     db.execute_update(par_q)
 
-    db.execute_update(f"CREATE INDEX ON wiki.{lang}_wiki(id)")
-    db.execute_update(f"CREATE INDEX ON wiki.{lang}_wiki(title)")
-    db.execute_update(f"CREATE INDEX ON wiki.{lang}_wiki(length)")
+    db.execute_update(f"CREATE INDEX ON wiki.{lang}_en_par({lang}_id)")
+    db.execute_update(f"CREATE INDEX ON wiki.{lang}_en_par(en_id)")
+
+    db.execute_update(f"CREATE INDEX ON wiki.{lang}_en_par({lang}_title)")
+    db.execute_update(f"CREATE INDEX ON wiki.{lang}_en_par(en_title)")
 
 
 if __name__ == "__main__":

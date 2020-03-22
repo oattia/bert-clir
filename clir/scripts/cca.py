@@ -16,6 +16,7 @@ def main(lang):
         FROM wiki.{lang}_en_titles_embs e, wiki.{lang}_en_par p
         WHERE e.{lang}_id = p.{lang}_id AND e.en_id = p.en_id
         ORDER BY random()
+        limit 10000
     """
 
     print("Getting data ...")
