@@ -10,7 +10,7 @@ def main(lang):
     db = DB()
 
     read_q = f"""
-        SELECT {lang}_id, en_id, {lang}_emb, en_emb, en_title, {lang}_title
+        SELECT e.{lang}_id, e.en_id, {lang}_emb, en_emb, en_title, {lang}_title
         FROM wiki.{lang}_en_titles_embs e, wiki.{lang}_en_par p
         WHERE e.{lang}_id = p.{lang}_id AND e.en_id = p.en_id
         ORDER BY random()
