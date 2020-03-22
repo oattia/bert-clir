@@ -16,7 +16,6 @@ def main(lang):
         FROM wiki.{lang}_en_titles_embs e, wiki.{lang}_en_par p
         WHERE e.{lang}_id = p.{lang}_id AND e.en_id = p.en_id
         ORDER BY random()
-        limit 100
     """
 
     print("Getting data ...")
@@ -29,7 +28,7 @@ def main(lang):
     en_titles = [p[4] for p in result]
     lang_titles = [p[5] for p in result]
 
-    train_size = int(len(result) / 2)
+    train_size = 50_000
 
     lang_ids_train = lang_ids[:train_size]
     en_ids_train = en_ids[:train_size]
