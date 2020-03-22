@@ -12,4 +12,4 @@ class CCA(ABC):
         raise NotImplementedError
 
     def __str__(self):
-        return f"{self.__class__.__name__}_{self.num_components}"
+        return f"{self.__class__.__name__}_{self.num_components}".lower()
