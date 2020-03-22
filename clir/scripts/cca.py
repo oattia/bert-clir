@@ -1,6 +1,8 @@
 import sys
 import numpy as np
 
+from tqdm import tqdm
+
 from clir.cca.linear_cca import LinearCCAModel
 from clir.db.pgsql import DB
 from clir.sim.cosine_sim import CosineSimilarity
@@ -54,7 +56,7 @@ def main(lang):
     assert len(lang_embs_test) == len(en_embs_test)
 
     records = []
-    for i in range(len(lang_ids)):
+    for i in tqdm(range(len(lang_ids))):
         random_perm = [idx for idx in np.random.permutation(len(lang_embs))[:5] if idx != i]
         candidates_embs = [lang_embs[i]] + [lang_embs[idx] for idx in random_perm]
 
